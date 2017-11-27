@@ -55,12 +55,13 @@ public class BusAnnotationProcessor {
         injectMethodBuilder.addStatement("$T rxBus =$T.getInstance()", RXBUS_TYPE, RXBUS_TYPE);
         for (BindBusField field : mFields) {
             // find views
+            injectMethodBuilder.addCode("mCompositeDisposable.add(");
             injectMethodBuilder.addCode("rxBus.toObservable($L)", field.getTag());
             injectMethodBuilder.addCode(".observeOn($L)", field.getFieldThread());
             if (field.getParameters().size() == 0)
-                injectMethodBuilder.addCode(".subscribe(o ->target.$N());", field.getFieldName());
+                injectMethodBuilder.addCode(".subscribe(o ->target.$N()));\n", field.getFieldName());
             else
-                injectMethodBuilder.addCode(".subscribe(o ->target.$N(($T)$L));", field.getFieldName(), field.getParameters().get(0).asType(), "o");
+                injectMethodBuilder.addCode(".subscribe(o ->target.$N(($T)$L)));\n", field.getFieldName(), field.getParameters().get(0).asType(), "o");
         }
         MethodSpec.Builder unBind = MethodSpec.methodBuilder("unSubscribe")
                 .addModifiers(Modifier.PUBLIC)

@@ -25,7 +25,6 @@ public class BindBusField {
         }
 
         mFieldElement = (ExecutableElement) element;
-        VariableElement ve = mFieldElement.getParameters().get(0);
         Subscribe bindView = mFieldElement.getAnnotation(Subscribe.class);
         mTag = bindView.tag();
         mThread = bindView.thread();
