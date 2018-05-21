@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion rootProject.ext.androidSdkVersion
+
     defaultConfig {
         applicationId "me.sauce.sample"
-        minSdkVersion 21
-        targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.androidSdkVersion
+        versionCode rootProject.VERSION_CODE as int
+        versionName rootProject.VERSION_NAME
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -24,13 +24,16 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(':rxBus')
+    annotationProcessor project(':rxBus-compiler')
+
+    implementation deps.supportCompat
+    implementation deps.supportDesign
+
+    testImplementation deps.junit
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    implementation 'com.android.support:appcompat-v7:25.4.0'
-    testImplementation 'junit:junit:4.12'
-    implementation project(':rxBus')
-    annotationProcessor project(':rxBus-compiler')
-    implementation 'com.android.support:design:25.4.0'
+
+
 }

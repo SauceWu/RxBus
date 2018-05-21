@@ -2,14 +2,13 @@ apply plugin: 'com.android.library'
 
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion rootProject.ext.androidSdkVersion
 
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode Integer.parseInt(rootProject.ext.VERSION_CODE)
-        versionName rootProject.ext.VERSION_NAME
+        targetSdkVersion rootProject.ext.androidSdkVersion
+        versionCode rootProject.VERSION_CODE as int
+        versionName rootProject.VERSION_NAME
 
     }
     compileOptions {
@@ -26,12 +25,12 @@ android {
 }
 
 dependencies {
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile deps.rx
-    compile deps.rxAndroid
-    compile deps.supportAnnotations
-    compile project(':rxBus-annotation')
+    api deps.rx
+    api deps.rxAndroid
+    api deps.supportAnnotations
+    api project(':rxBus-annotation')
 }
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

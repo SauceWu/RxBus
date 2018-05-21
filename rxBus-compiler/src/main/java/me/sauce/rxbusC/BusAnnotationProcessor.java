@@ -1,14 +1,14 @@
 package me.sauce.rxbusC;
 
-import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.TypeVariableName;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,10 +47,13 @@ public class BusAnnotationProcessor {
 
     public JavaFile generateFinder() {
         TypeMirror typeMirror = mClassElement.asType();
+        ParameterizedTypeName typeName = (ParameterizedTypeName) TypeName.get(typeMirror);
+        typeName.nestedClass("LoginActivity", new ArrayList<>());
+        ;
         FieldSpec compositeDisposable = FieldSpec.builder(DISPOSABLES_TYPE, "mCompositeDisposable", Modifier.PUBLIC).initializer("new CompositeDisposable()").build();
         MethodSpec.Builder injectMethodBuilder = MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PUBLIC)
-                .addParameter(TypeName.get(typeMirror), "target");
+                .addParameter(typeName.rawType, "target");
 
         injectMethodBuilder.addStatement("$T rxBus =$T.getInstance()", RXBUS_TYPE, RXBUS_TYPE);
         for (BindBusField field : mFields) {
@@ -125,6 +128,31 @@ public class BusAnnotationProcessor {
 
     private static boolean isTypeEqual(TypeMirror typeMirror, String otherType) {
         return otherType.equals(typeMirror.toString());
+    }
+
+    TypeName withoutMissingTypeVariables(
+            TypeName typeName) {
+        if (!(typeName instanceof ParameterizedTypeName)) {
+            return typeName;
+        }
+
+        ParameterizedTypeName parameterizedTypeName = (ParameterizedTypeName) typeName;
+
+        List<TypeName> adjustedArguments = new ArrayList<>();
+        for (TypeName argument : parameterizedTypeName.typeArguments) {
+            if (argument instanceof ParameterizedTypeName) {
+                // Recursive call
+                adjustedArguments.add(withoutMissingTypeVariables(argument));
+            } else if (argument instanceof TypeVariableName) {
+                TypeVariableName variable = (TypeVariableName) argument;
+                adjustedArguments.add(variable);
+            } else {
+                adjustedArguments.add(argument);
+            }
+        }
+
+        TypeName[] adjustedArgumentsArr = adjustedArguments.toArray(new TypeName[]{});
+        return ParameterizedTypeName.get(parameterizedTypeName.rawType, adjustedArgumentsArr);
     }
 
 }

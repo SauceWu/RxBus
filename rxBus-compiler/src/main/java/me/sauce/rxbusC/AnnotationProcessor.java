@@ -37,7 +37,7 @@ public class AnnotationProcessor extends AbstractProcessor {
     @Override
     public Set<String> getSupportedAnnotationTypes() {
         Set<String> annotationsTypes = new LinkedHashSet<>();
-        mMessager.printMessage(Diagnostic.Kind.NOTE,"getSupportedAnnotationTypes");
+        mMessager.printMessage(Diagnostic.Kind.NOTE, "getSupportedAnnotationTypes");
         annotationsTypes.add(Subscribe.class.getCanonicalName());
         return annotationsTypes;
     }
@@ -63,7 +63,7 @@ public class AnnotationProcessor extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         mBusAnnotatedClassMap.clear();
         try {
-            mMessager.printMessage(Diagnostic.Kind.NOTE,"process");
+            mMessager.printMessage(Diagnostic.Kind.NOTE, "process");
 
             processBindBus(roundEnv);
         } catch (IllegalArgumentException e) {
@@ -73,13 +73,12 @@ public class AnnotationProcessor extends AbstractProcessor {
         for (BusAnnotationProcessor annotatedClass : mBusAnnotatedClassMap.values()) {
             try {
                 annotatedClass.generateFinder().writeTo(mFiler);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 mMessager.printMessage(Diagnostic.Kind.ERROR, "Unable to write binding for type %s: %s" + e.getMessage());
             }
         }
         return true;
     }
-
 
 
     private void processBindBus(RoundEnvironment roundEnv) throws IllegalArgumentException {

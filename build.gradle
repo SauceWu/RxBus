@@ -1,18 +1,17 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
+    apply from: 'ext_settings.gradle'
 
     repositories {
-
         maven { url "http://maven.aliyun.com/nexus/content/groups/public" }
         jcenter()
-
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0-alpha5'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
+        classpath 'com.android.tools.build:gradle:3.1.2'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -30,45 +29,3 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-ext {
-    VERSION_NAME = '2.0.0'
-    VERSION_CODE = '34'
-
-    buildToolsVersion = '25.0.3'
-    supportLibraryVersion = '25.3.1'
-
-    minSdkVersion = 16
-    targetSdkVersion = 21
-
-    compileSdkVersion = 25
-
-    sourceCompatibilityVersion = JavaVersion.VERSION_1_8
-    targetCompatibilityVersion = JavaVersion.VERSION_1_8
-}
-
-def androidToolsVersion = '25.2.1'
-def supportLibraryVersion = '25.3.1'
-
-ext.deps = [
-        // Android
-        supportv4          : "com.android.support:support-v4:$supportLibraryVersion",
-        supportAnnotations : "com.android.support:support-annotations:$supportLibraryVersion",
-        supportCompat      : "com.android.support:appcompat-v7:$supportLibraryVersion",
-        supportDesign      : "com.android.support:design:$supportLibraryVersion",
-        supportRecyclerview: "com.android.support:recyclerview-v7:$supportLibraryVersion",
-
-        supportConstraint  : 'com.android.support.constraint:constraint-layout:1.0.2',
-
-        // Square
-        javapoet           : 'com.squareup:javapoet:1.8.0',
-
-        // Third Party
-        javaparser         : 'com.github.javaparser:javaparser-core:2.4.0',
-
-        // Test dependencies
-        junit              : 'junit:junit:4.12',
-
-        rx                 : 'io.reactivex.rxjava2:rxjava:2.1.0',
-
-        rxAndroid          : 'io.reactivex.rxjava2:rxandroid:2.0.1',
-]

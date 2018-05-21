@@ -39,7 +39,7 @@ allprojects {
 
 
 dependencies {
-   compile  "me.sauce:rxBus:1.0.3"
-   annotationProcessor "me.sauce:rxBus-compiler:1.0.3"
+   compile  "me.sauce:rxBus:1.1.0"
+   annotationProcessor "me.sauce:rxBus-compiler:1.1.0"
 }
 ```
