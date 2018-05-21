@@ -48,8 +48,6 @@ public class BusAnnotationProcessor {
     public JavaFile generateFinder() {
         TypeMirror typeMirror = mClassElement.asType();
         ParameterizedTypeName typeName = (ParameterizedTypeName) TypeName.get(typeMirror);
-        typeName.nestedClass("LoginActivity", new ArrayList<>());
-        ;
         FieldSpec compositeDisposable = FieldSpec.builder(DISPOSABLES_TYPE, "mCompositeDisposable", Modifier.PUBLIC).initializer("new CompositeDisposable()").build();
         MethodSpec.Builder injectMethodBuilder = MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PUBLIC)
