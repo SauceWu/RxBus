@@ -47,11 +47,11 @@ public class BusAnnotationProcessor {
 
     public JavaFile generateFinder() {
         TypeMirror typeMirror = mClassElement.asType();
-        ParameterizedTypeName typeName = (ParameterizedTypeName) TypeName.get(typeMirror);
+        TypeName typeName = TypeName.get(typeMirror);
         FieldSpec compositeDisposable = FieldSpec.builder(DISPOSABLES_TYPE, "mCompositeDisposable", Modifier.PUBLIC).initializer("new CompositeDisposable()").build();
         MethodSpec.Builder injectMethodBuilder = MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PUBLIC)
-                .addParameter(typeName.rawType, "target");
+                .addParameter(typeName instanceof ParameterizedTypeName ? ((ParameterizedTypeName) typeName).rawType : ClassName.get(typeMirror), "target");
 
         injectMethodBuilder.addStatement("$T rxBus =$T.getInstance()", RXBUS_TYPE, RXBUS_TYPE);
         for (BindBusField field : mFields) {
@@ -130,7 +130,7 @@ public class BusAnnotationProcessor {
 
     TypeName withoutMissingTypeVariables(
             TypeName typeName) {
-        if (!(typeName instanceof ParameterizedTypeName)) {
+        if ((typeName instanceof ParameterizedTypeName)) {
             return typeName;
         }
 

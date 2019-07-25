@@ -1,5 +1,5 @@
 ext {
-    VERSION_NAME = '1.1.0'
+    VERSION_NAME = '1.1.1'
     VERSION_CODE = 14
     androidToolsVersion = '26.1.1'
     supportLibraryVersion = '27.1.1'
